@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StickItUP! Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --panel-bg: #ffffff;
+            --text: #1c1c1e;
+            --text-muted: #8e8e93;
+            --accent: #007aff;
+            --accent-gradient: linear-gradient(135deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+            --card-bg: #ffffff;
+            --card-hover-bg: #fcfcfd;
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.12);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        body.dark-mode {
+            --bg: #0d0e12;
+            --panel-bg: #15171e;
+            --text: #f2f2f7;
+            --text-muted: #a1a1aa;
+            --accent: #0a84ff;
+            --card-bg: #1e212b;
+            --card-hover-bg: #242834;
+            --border: rgba(255, 255, 255, 0.07);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.3);
+            --shadow-lg: 0 16px 40px rgba(0,0,0,0.4);
+        }
+
+        body {
+            width: 360px;
+            height: 520px;
+            padding: 0;
+            margin: 0;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        .app-header {
+            padding: 20px 24px 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border);
+            z-index: 10;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 15px;
+            box-shadow: 0 4px 10px rgba(120, 75, 160, 0.35);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .version {
+            font-size: 10px;
+            opacity: 0.5;
+            font-weight: 600;
+        }
+
+        /* Segmented Tabs Control */
+        .tabs-nav {
+            display: flex;
+            padding: 6px;
+            background: var(--bg);
+            margin: 12px 24px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            gap: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 4px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--panel-bg);
+            color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Views Container */
+        .views-content {
+            flex: 1;
+            padding: 0 24px 20px 24px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .view-panel {
+            display: none;
+            height: 100%;
+            animation: view-fade 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        @keyframes view-fade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home View Widgets */
+        .btn-add-note {
+            width: 100%;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 24px rgba(120, 75, 160, 0.3);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-add-note:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 14px 32px rgba(120, 75, 160, 0.45);
+        }
+
+        .btn-add-note:active {
+            transform: translateY(1px);
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: var(--panel-bg);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s;
+        }
+
+        .control-row:hover {
+            transform: translateY(-2px);
+        }
+
+        .control-label-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .control-title {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .control-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Toggle Switches */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 42px;
+            height: 22px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #d1d1d6;
+            transition: .3s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 22px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        body.dark-mode .slider {
+            background-color: #38383a;
+        }
+
+        input:checked + .slider {
+            background-image: var(--accent-gradient);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Stat Card */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .stat-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-num {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 2px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* View 2: Notes Directory */
+        .search-container {
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--panel-bg);
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 290px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .note-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .note-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Note theme color line indicator on the left side */
+        .note-card-border {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+        }
+
+        .note-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .note-card-site {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text);
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .site-favicon {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .note-card-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .action-btn {
+            background: rgba(0, 0, 0, 0.04);
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text);
+            transition: all 0.2s;
+            padding: 0;
+        }
+
+        body.dark-mode .action-btn {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .action-btn.btn-delete-card:hover {
+            background: #ff3b30;
+        }
+
+        .note-card-preview {
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--text);
+            opacity: 0.85;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+            margin-left: 2px;
+        }
+
+        .note-card-preview.empty-preview {
+            font-style: italic;
+            opacity: 0.45;
+        }
+
+        /* Empty state styling */
+        .empty-state {
+            text-align: center;
+            padding: 36px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .empty-icon {
+            font-size: 40px;
+            animation: float-icon 3s ease-in-out infinite;
+        }
+
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .empty-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        /* View 3: Advanced Customize & Tools */
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 18px 0 10px 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 4px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .form-row label {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .form-select {
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--panel-bg);
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-tool {
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--panel-bg);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-tool:hover {
+            border-color: var(--accent);
+            background: rgba(0, 122, 255, 0.05);
+        }
+
+        .btn-tool.danger {
+            grid-column: 1 / -1;
+            background: rgba(255, 59, 48, 0.06);
+            border-color: rgba(255, 59, 48, 0.15);
+            color: #ff3b30;
+        }
+
+        .btn-tool.danger:hover {
+            background: #ff3b30;
+            color: white;
+            border-color: #ff3b30;
+        }
+
+        /* Message Banner */
+        #message {
+            position: absolute;
+            bottom: 20px;
+            left: 24px;
+            right: 24px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            text-align: center;
+            display: none;
+            box-shadow: var(--shadow-md);
+            z-index: 100;
+            animation: siu-toast-in 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes siu-toast-in {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        body.dark-mode ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <div class="logo-group">
+            <div class="logo-icon">S</div>
+            <div class="logo-text">StickItUP!</div>
+        </div>
+        <div class="version">v1.1.0</div>
+    </div>
+
+    <!-- Segmented Tabs Navigation -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="tab-home">🏠 Control</button>
+        <button class="tab-btn" data-tab="tab-directory">📂 My Notes</button>
+        <button class="tab-btn" data-tab="tab-settings">⚙️ Settings</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="views-content">
+        <!-- View 1: Control Center -->
+        <div class="view-panel active" id="tab-home">
+            <button id="addNote" class="btn-add-note">Add Sticky Note ✨</button>
+
+            <div class="control-row">
+                <div class="control-label-group">
+                    <span class="control-title">Show All Notes</span>
+                    <span class="control-desc">Toggle notes visibility on pages</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="globallyHiddenToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="control-row">
+                <div class="control-label-group">
+                    <span class="control-title">Dark Theme Mode</span>
+                    <span class="control-desc">Use glassy dark mode styling</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-num" id="totalNotesCount">0</div>
+                    <div class="stat-label">Total Notes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" id="pageNotesCount">0</div>
+                    <div class="stat-label">On This Page</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: Notes Directory Manager -->
+        <div class="view-panel" id="tab-directory">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchNotesInput" placeholder="Search note contents or sites...">
+            </div>
+
+            <div class="notes-list" id="notesListContainer">
+                <!-- Injected dynamically -->
+            </div>
+        </div>
+
+        <!-- View 3: Advanced Customizations & Tools -->
+        <div class="view-panel" id="tab-settings">
+            <div class="section-title">Default Note Presets</div>
+            <div class="form-row">
+                <label for="defaultFontFamily">Default Handwriting Font</label>
+                <select class="form-select" id="defaultFontFamily">
+                    <option value="'Outfit', sans-serif">Modern Outfit</option>
+                    <option value="'Caveat', cursive">Warm Cursive</option>
+                    <option value="'Playfair Display', serif">Classic Serif</option>
+                    <option value="'Fira Code', monospace">Dev Monospace</option>
+                    <option value="'Pacifico', cursive">Retro Script</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="defaultColorTheme">Default Background Theme</label>
+                <select class="form-select" id="defaultColorTheme">
+                    <option value="linear-gradient(135deg, rgba(255, 154, 158, 0.95) 0%, rgba(254, 207, 239, 0.95) 100%)">Sunset Pink Gradient</option>
+                    <option value="linear-gradient(135deg, rgba(161, 196, 253, 0.95) 0%, rgba(194, 233, 251, 0.95) 100%)">Ice Blue Gradient</option>
+                    <option value="linear-gradient(135deg, rgba(246, 211, 101, 0.95) 0%, rgba(253, 160, 133, 0.95) 100%)">Warm Peach Gradient</option>
+                    <option value="linear-gradient(135deg, rgba(212, 252, 121, 0.95) 0%, rgba(150, 230, 161, 0.95) 100%)">Green Apple Gradient</option>
+                    <option value="rgba(255, 255, 255, 0.85)">Frosted Light Solid</option>
+                    <option value="rgba(30, 30, 30, 0.85)">Frosted Dark Solid</option>
+                </select>
+            </div>
+
+            <div class="section-title">URL Filter Settings</div>
+            <div class="form-row">
+                <label for="urlMatchSetting">Display Notes On</label>
+                <select class="form-select" id="urlMatchSetting">
+                    <option value="exact">Exact Web Address Matches Only</option>
+                    <option value="domain">Any Page on the Same Domain</option>
+                </select>
+            </div>
+
+            <div class="section-title">Data Backup & Tools</div>
+            <div class="tools-grid">
+                <button class="btn-tool" id="btnExport">📥 Export JSON</button>
+                <button class="btn-tool" id="btnImport">📤 Import JSON</button>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                <button class="btn-tool danger" id="btnClearAll">⚠️ Clear All Sticky Notes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message toast notification -->
+    <div id="message"></div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

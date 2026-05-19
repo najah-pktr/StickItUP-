@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StickItUP! Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Caveat:wght@700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg: #f5f6fa;
@@ -18,9 +21,9 @@
             --card-bg: #ffffff;
             --card-hover-bg: #fcfcfd;
             --border: rgba(0, 0, 0, 0.08);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-            --shadow-lg: 0 16px 40px rgba(0,0,0,0.12);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
             --radius-sm: 10px;
             --radius-md: 16px;
             --radius-lg: 24px;
@@ -35,9 +38,9 @@
             --card-bg: #1e212b;
             --card-hover-bg: #242834;
             --border: rgba(255, 255, 255, 0.07);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.3);
-            --shadow-lg: 0 16px 40px rgba(0,0,0,0.4);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.4);
         }
 
         body {
@@ -157,8 +160,15 @@
         }
 
         @keyframes view-fade {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Home View Widgets */
@@ -260,18 +270,18 @@
             background-color: white;
             transition: .3s cubic-bezier(0.23, 1, 0.32, 1);
             border-radius: 50%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
         }
 
         body.dark-mode .slider {
             background-color: #38383a;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-image: var(--accent-gradient);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(20px);
         }
 
@@ -402,7 +412,7 @@
             height: 16px;
             border-radius: 4px;
             background: #ffffff;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .note-card-actions {
@@ -474,8 +484,15 @@
         }
 
         @keyframes float-icon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
         }
 
         .empty-text {
@@ -581,33 +598,45 @@
         }
 
         @keyframes siu-toast-in {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 5px;
         }
+
         ::-webkit-scrollbar-track {
             background: transparent;
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(0, 0, 0, 0.1);
             border-radius: 4px;
         }
+
         body.dark-mode ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
+
 <body>
     <div class="app-header">
         <div class="logo-group">
             <div class="logo-icon">S</div>
             <div class="logo-text">StickItUP!</div>
         </div>
-        <div class="version">v1.1.0</div>
+        <div class="version">v1.1.0 by <a href="https://github.com/najah-pktr"
+                style="color: var(--siu-text-dark);text-decoration: none;">Najah</a></div>
     </div>
 
     <!-- Segmented Tabs Navigation -->
@@ -662,7 +691,8 @@
         <div class="view-panel" id="tab-directory">
             <div class="search-container">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="searchNotesInput" placeholder="Search note contents or sites...">
+                <input type="text" class="search-input" id="searchNotesInput"
+                    placeholder="Search note contents or sites...">
             </div>
 
             <div class="notes-list" id="notesListContainer">
@@ -687,10 +717,18 @@
             <div class="form-row">
                 <label for="defaultColorTheme">Default Background Theme</label>
                 <select class="form-select" id="defaultColorTheme">
-                    <option value="linear-gradient(135deg, rgba(255, 154, 158, 0.95) 0%, rgba(254, 207, 239, 0.95) 100%)">Sunset Pink Gradient</option>
-                    <option value="linear-gradient(135deg, rgba(161, 196, 253, 0.95) 0%, rgba(194, 233, 251, 0.95) 100%)">Ice Blue Gradient</option>
-                    <option value="linear-gradient(135deg, rgba(246, 211, 101, 0.95) 0%, rgba(253, 160, 133, 0.95) 100%)">Warm Peach Gradient</option>
-                    <option value="linear-gradient(135deg, rgba(212, 252, 121, 0.95) 0%, rgba(150, 230, 161, 0.95) 100%)">Green Apple Gradient</option>
+                    <option
+                        value="linear-gradient(135deg, rgba(255, 154, 158, 0.95) 0%, rgba(254, 207, 239, 0.95) 100%)">
+                        Sunset Pink Gradient</option>
+                    <option
+                        value="linear-gradient(135deg, rgba(161, 196, 253, 0.95) 0%, rgba(194, 233, 251, 0.95) 100%)">
+                        Ice Blue Gradient</option>
+                    <option
+                        value="linear-gradient(135deg, rgba(246, 211, 101, 0.95) 0%, rgba(253, 160, 133, 0.95) 100%)">
+                        Warm Peach Gradient</option>
+                    <option
+                        value="linear-gradient(135deg, rgba(212, 252, 121, 0.95) 0%, rgba(150, 230, 161, 0.95) 100%)">
+                        Green Apple Gradient</option>
                     <option value="rgba(255, 255, 255, 0.85)">Frosted Light Solid</option>
                     <option value="rgba(30, 30, 30, 0.85)">Frosted Dark Solid</option>
                 </select>
@@ -720,4 +758,5 @@
 
     <script src="popup.js"></script>
 </body>
+
 </html>
